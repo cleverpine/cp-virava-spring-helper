@@ -37,11 +37,11 @@ public class ViravaAuthenticationToken extends AbstractAuthenticationToken {
         super.setAuthenticated(true);
     }
 
-    public static ViravaAuthenticationToken ofUnauthorised(String tokenString) {
+    public static ViravaAuthenticationToken ofUnauthorized(String tokenString) {
         return new ViravaAuthenticationToken(null, tokenString, Collections.emptyList(), new HashMap<>());
     }
 
-    public static ViravaAuthenticationToken ofAuthorised(
+    public static ViravaAuthenticationToken ofAuthorized(
             Map<String, Object> payloadJsonMap,
             RoleConfig<?, ?> roleConfig,
             AuthTokenConfig authTokenConfig,

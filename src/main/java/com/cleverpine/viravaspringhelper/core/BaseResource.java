@@ -4,9 +4,8 @@ import java.util.List;
 
 public interface BaseResource {
 
-    static final String ID_ACCESS_LIST_PREFIX = "IDS_";
-
     static String getIdsParameterName(BaseResource resource) {
+        final String ID_ACCESS_LIST_PREFIX = "IDS_";
         return (ID_ACCESS_LIST_PREFIX + resource.resource()).toUpperCase();
     }
 

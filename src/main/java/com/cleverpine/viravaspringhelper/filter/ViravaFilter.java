@@ -24,7 +24,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 public class ViravaFilter extends OncePerRequestFilter {
 
-    public static final String BEARER_PREFIX = "Bearer ";
+    private static final String BEARER_PREFIX = "Bearer ";
 
     private final RoleConfig<?, ?> roleConfig;
 
@@ -42,7 +42,7 @@ public class ViravaFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (authorizationHeader == null || !authorizationHeader.startsWith(BEARER_PREFIX)) {
-            setUnauthorisedAuthContext(null);
+            setUnauthorizedAuthContext(null);
             filterChain.doFilter(request, response);
             return;
         }
@@ -58,10 +58,10 @@ public class ViravaFilter extends OncePerRequestFilter {
             Map<String, Object> payloadJsonMap = objectMapper.readValue(payload, new TypeReference<Map<String, Object>>() {
             });
             var authentication = ViravaAuthenticationToken
-                    .ofAuthorised(payloadJsonMap, roleConfig, authTokenConfig, tokenString);
+                    .ofAuthorized(payloadJsonMap, roleConfig, authTokenConfig, tokenString);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (JWTVerificationException | JsonProcessingException exception) {
-            setUnauthorisedAuthContext(tokenString);
+            setUnauthorizedAuthContext(tokenString);
             filterChain.doFilter(request, response);
             return;
         }
@@ -69,8 +69,8 @@ public class ViravaFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void setUnauthorisedAuthContext(String token) {
-        SecurityContextHolder.getContext().setAuthentication(ViravaAuthenticationToken.ofUnauthorised(token));
+    private void setUnauthorizedAuthContext(String token) {
+        SecurityContextHolder.getContext().setAuthentication(ViravaAuthenticationToken.ofUnauthorized(token));
     }
 
     private DecodedJWT verify(String token, String secret, String issuer) {
