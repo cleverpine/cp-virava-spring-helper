@@ -1,0 +1,36 @@
+trigger:
+  - main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: DownloadSecureFile@1
+    name: key
+    displayName: 'Download GPG'
+    inputs:
+      secureFile: 'key.asc'
+      
+  - script: |
+      gpg --import $(key.secureFilePath)
+
+  - task: DownloadSecureFile@1
+    name: settings
+    displayName: 'Download settings.xml'
+    inputs:
+      secureFile: 'settings.xml'
+
+  - script: |
+      cp $(settings.secureFilePath) /usr/share/apache-maven-3.8.7/conf/settings.xml
+        
+  - task: Maven@3
+    inputs:
+      mavenPomFile: 'pom.xml'
+      goals: 'clean deploy'
+      publishJUnitResults: false
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.17'
+      mavenVersionOption: 'Default'
+      mavenAuthenticateFeed: false
+      effectivePomSkip: false
+      sonarQubeRunAnalysis: false
