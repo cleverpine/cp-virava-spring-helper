@@ -24,7 +24,7 @@ public class Permission {
                 scopeTypes.contains(ScopeType.DELETE));
     }
 
-    public static Permission of(PermissionBuilder permissionBuilder) {
+    public static Permission of(PermissionInitializer permissionBuilder) {
         return new Permission(permissionBuilder.getResource(), permissionBuilder.getScopeTypes());
     }
 

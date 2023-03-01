@@ -6,13 +6,13 @@ import java.util.HashSet;
 import java.util.Set;
 import org.springframework.lang.NonNull;
 
-public class PermissionBuilder {
+public class PermissionInitializer {
 
     private final BaseResource resource;
 
     private final Set<ScopeType> scopeTypes;
 
-    public PermissionBuilder(@NonNull BaseResource resource) {
+    public PermissionInitializer(@NonNull BaseResource resource) {
         this.resource = resource;
         this.scopeTypes = new HashSet<>();
     }
@@ -25,14 +25,12 @@ public class PermissionBuilder {
         return this.scopeTypes;
     }
 
-    public PermissionBuilder addScope(@NonNull Collection<ScopeType> scopeTypes) {
+    public void addScope(@NonNull Collection<ScopeType> scopeTypes) {
         this.scopeTypes.addAll(scopeTypes);
-        return this;
     }
 
-    public PermissionBuilder addScope(@NonNull ScopeType scopeType) {
+    public void addScope(@NonNull ScopeType scopeType) {
         this.scopeTypes.add(scopeType);
-        return this;
     }
 
 }

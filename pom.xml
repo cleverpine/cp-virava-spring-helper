@@ -10,16 +10,18 @@
     <packaging>jar</packaging>
 
     <properties>
-        <revision>3.0.0</revision>
+        <revision>3.1.0</revision>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
         <spring.version>6.0.3</spring.version>
         <spring.security.version>6.0.1</spring.security.version>
+        <spring-security-web.version>6.0.1</spring-security-web.version>
         <fasterxml.jackson.version>2.14.1</fasterxml.jackson.version>
         <tomcat.version>10.1.0</tomcat.version>
         <java-jwt.version>3.19.2</java-jwt.version>
+        <jwks-rsa.version>0.22.0</jwks-rsa.version>
         <cp-spring-error-util.version>1.0.3</cp-spring-error-util.version>
 
         <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
@@ -36,9 +38,19 @@
             <version>${java-jwt.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>jwks-rsa</artifactId>
+            <version>${jwks-rsa.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
             <version>${spring.security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${spring-security-web.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

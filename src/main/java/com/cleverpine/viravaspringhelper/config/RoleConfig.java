@@ -3,7 +3,7 @@ package com.cleverpine.viravaspringhelper.config;
 import com.cleverpine.viravaspringhelper.core.BaseResource;
 import com.cleverpine.viravaspringhelper.core.BaseRole;
 import com.cleverpine.viravaspringhelper.dto.Permission;
-import com.cleverpine.viravaspringhelper.dto.PermissionBuilder;
+import com.cleverpine.viravaspringhelper.dto.PermissionInitializer;
 import com.cleverpine.viravaspringhelper.dto.ScopeType;
 import java.util.Collections;
 import java.util.HashMap;
@@ -76,8 +76,9 @@ public class RoleConfig<R extends BaseRole, RE extends BaseResource> {
         return permissionList.stream().collect(Collectors.toMap(Permission::getResource, Permission::getScopeTypes));
     }
 
-    private Map<BaseResource, PermissionBuilder> getDefaultPermissionList() {
-        return resourceList.stream().collect(Collectors.toMap(Function.identity(), PermissionBuilder::new));
+    private Map<BaseResource, PermissionInitializer> getDefaultPermissionList() {
+        return resourceList.stream()
+                .collect(Collectors.toMap(Function.identity(), PermissionInitializer::new));
     }
 
     public List<Permission> getRolePermissionList(List<String> roleList) {

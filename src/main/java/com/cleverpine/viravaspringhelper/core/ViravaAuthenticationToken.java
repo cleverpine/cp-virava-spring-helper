@@ -4,15 +4,14 @@ import com.cleverpine.viravaspringhelper.config.AuthTokenConfig;
 import com.cleverpine.viravaspringhelper.config.RoleConfig;
 import com.cleverpine.viravaspringhelper.dto.Permission;
 import com.cleverpine.viravaspringhelper.dto.ResourceIdsAccess;
-import java.util.Collections;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.util.Assert;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.util.Assert;
 
 public class ViravaAuthenticationToken extends AbstractAuthenticationToken {
 
@@ -37,11 +36,7 @@ public class ViravaAuthenticationToken extends AbstractAuthenticationToken {
         super.setAuthenticated(true);
     }
 
-    public static ViravaAuthenticationToken ofUnauthorised(String tokenString) {
-        return new ViravaAuthenticationToken(null, tokenString, Collections.emptyList(), new HashMap<>());
-    }
-
-    public static ViravaAuthenticationToken ofAuthorised(
+    public static ViravaAuthenticationToken ofAuthorized(
             Map<String, Object> payloadJsonMap,
             RoleConfig<?, ?> roleConfig,
             AuthTokenConfig authTokenConfig,

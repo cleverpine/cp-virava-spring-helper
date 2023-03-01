@@ -3,13 +3,8 @@ package com.cleverpine.viravaspringhelper.core;
 import com.cleverpine.viravaspringhelper.dto.Permission;
 import com.cleverpine.viravaspringhelper.dto.ResourceIdsAccess;
 import com.cleverpine.viravaspringhelper.dto.ScopeType;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -73,6 +68,9 @@ public class ViravaUserPrincipal {
     }
 
     public <CPI extends CustomPrincipalInfo> CPI getCustomPrincipalInfo(Class<CPI> type) {
+        if (Objects.isNull(customPrincipalInfo)) {
+            return null;
+        }
         return type.cast(customPrincipalInfo);
     }
 
@@ -96,7 +94,7 @@ public class ViravaUserPrincipal {
         return isCompanyUser;
     }
 
-    public boolean authorized(BaseResource resource, ScopeType... requiredScopes) {
+    public boolean isAuthorized(BaseResource resource, ScopeType... requiredScopes) {
         if (resource == null || requiredScopes == null) {
             return true;
         }
@@ -107,7 +105,7 @@ public class ViravaUserPrincipal {
         return !Collections.disjoint(resourceScopes, Set.of(requiredScopes));
     }
 
-    public boolean authorized(BaseResource resource, Long resourceId, boolean requireAllResourceIds, ScopeType... requiredScopes) {
+    public boolean isAuthorized(BaseResource resource, Long resourceId, boolean requireAllResourceIds, ScopeType... requiredScopes) {
         if (resource == null || requiredScopes == null || requiredScopes.length == 0) {
             return true;
         }

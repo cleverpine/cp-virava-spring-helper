@@ -17,7 +17,7 @@ public class BaseViravaSecuredAspect {
         this.viravaPrincipalProvider = viravaPrincipalProvider;
     }
 
-    protected void authorise(
+    protected void authorize(
             JoinPoint joinPoint,
             BaseResource resource,
             String resourceIdParamName,
@@ -32,19 +32,18 @@ public class BaseViravaSecuredAspect {
 
         Long resourceId = getMethodSuppliedResourceId(joinPoint, resourceIdParamName);
 
-        if (!principal.authorized(resource, resourceId, requireAllResourceIds, scopeList)) {
+        if (!principal.isAuthorized(resource, resourceId, requireAllResourceIds, scopeList)) {
             throw new AuthorisationException("User doesn't have required permissions");
         }
     }
 
-    protected void authorise(JoinPoint joinPoint, BaseResource resource, ScopeType[] scopeList) {
-        ViravaAuthenticationToken authentication = (ViravaAuthenticationToken)this.viravaPrincipalProvider.getAuthentication().orElseThrow(() -> {
-            return new AuthorisationException("Invalid SecurityContextHolder");
-        });
+    protected void authorize(JoinPoint joinPoint, BaseResource resource, ScopeType[] scopeList) {
+        ViravaAuthenticationToken authentication = this.viravaPrincipalProvider.getAuthentication()
+                .orElseThrow(() -> new AuthorisationException("Invalid SecurityContextHolder"));
         ViravaUserPrincipal principal = authentication.getPrincipal();
         if (principal == null) {
             throw new AuthorisationException("Missing ViravaUserPrincipal");
-        } else if (!principal.authorized(resource, scopeList)) {
+        } else if (!principal.isAuthorized(resource, scopeList)) {
             throw new AuthorisationException("User doesn't have required permissions");
         }
     }
@@ -57,16 +56,16 @@ public class BaseViravaSecuredAspect {
         var methodSig = (MethodSignature) joinPoint.getSignature();
         var parameters = methodSig.getParameterNames();
         if (parameters == null) {
-            throw new AssertionError("ViravaSecuredAsspect::authorise called on a method without parameters");
+            throw new AssertionError("ViravaSecuredAsspect::authorize called on a method without parameters");
         }
 
         var args = joinPoint.getArgs();
         if (args == null) {
-            throw new AssertionError("ViravaSecuredAsspect::authorise called without arguments");
+            throw new AssertionError("ViravaSecuredAsspect::authorize called without arguments");
         }
 
         if (args.length != parameters.length) {
-            throw new AssertionError("ViravaSecuredAsspect::authorise parameter count does not match arg count");
+            throw new AssertionError("ViravaSecuredAsspect::authorize parameter count does not match arg count");
         }
 
         Long resourceId = null;
