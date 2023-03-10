@@ -21,14 +21,12 @@ steps:
     displayName: 'Download settings.xml'
     inputs:
       secureFile: 'settings.xml'
-
-  - script: |
-      cp $(settings.secureFilePath) /usr/share/apache-maven-3.9.0/conf/settings.xml
         
   - task: Maven@3
     inputs:
       mavenPomFile: 'pom.xml'
       goals: 'clean deploy'
+      options: '--settings $(settings.secureFilePath)'
       publishJUnitResults: false
       javaHomeOption: 'JDKVersion'
       jdkVersionOption: '1.17'
