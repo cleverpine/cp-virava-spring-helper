@@ -46,7 +46,8 @@ public class ViravaFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (authorizationHeader == null || !authorizationHeader.startsWith(BEARER_PREFIX)) {
-            throw new InvalidTokenAuthenticationException(INVALID_ACCESS_TOKEN);
+            filterChain.doFilter(request, response);
+            return;
         }
         var tokenString = authorizationHeader.substring(BEARER_PREFIX.length());
         try {
