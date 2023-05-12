@@ -156,7 +156,7 @@
 
     <name>CP Virava Spring Helper</name>
     <description>Library for Spring Framework projects using Virava</description>
-    <url>https://dev.azure.com/cleverpine/Virava%20Solution/_git/cp-virava-spring-helper</url>
+    <url>https://github.com/cleverpine/cp-virava-spring-helper</url>
 
     <licenses>
         <license>
@@ -188,7 +188,7 @@
     <scm>
         <connection>https://cleverpine@dev.azure.com/cleverpine/JavaLibs/_git/cp-virava-spring-helper</connection>
         <developerConnection>git@ssh.dev.azure.com:v3/cleverpine/JavaLibs/cp-virava-spring-helper</developerConnection>
-        <url>https://dev.azure.com/cleverpine/JavaLibs/_git/cp-virava-spring-helper</url>
+        <url>https://github.com/cleverpine/cp-virava-spring-helper</url>
     </scm>
 
     <profiles>
