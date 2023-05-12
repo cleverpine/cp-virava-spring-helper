@@ -186,8 +186,8 @@
     </distributionManagement>
 
     <scm>
-        <connection>https://cleverpine@dev.azure.com/cleverpine/JavaLibs/_git/cp-virava-spring-helper</connection>
-        <developerConnection>git@ssh.dev.azure.com:v3/cleverpine/JavaLibs/cp-virava-spring-helper</developerConnection>
+        <connection>https://github.com/cleverpine/cp-virava-spring-helper.git</connection>
+        <developerConnection>git@github.com:cleverpine/cp-virava-spring-helper.git</developerConnection>
         <url>https://github.com/cleverpine/cp-virava-spring-helper</url>
     </scm>
 
