@@ -27,7 +27,8 @@ public class ViravaAuthenticationToken extends AbstractAuthenticationToken {
 
     private final List<String> roles;
 
-    private ViravaAuthenticationToken(ViravaUserPrincipal userPrincipal, String tokenString, List<String> roles, Map<String, Object> payloadJsonMap) {
+    protected ViravaAuthenticationToken(ViravaUserPrincipal userPrincipal, String tokenString, List<String> roles,
+                                        Map<String, Object> payloadJsonMap) {
         super(userPrincipal == null ? null : userPrincipal.getAuthorityList());
         this.userPrincipal = userPrincipal;
         this.tokenString = tokenString;
