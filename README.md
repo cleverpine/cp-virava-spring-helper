@@ -13,18 +13,16 @@ Virava provides the following features:
 
 - **Type-safe Authorisation Rules**: Define your resources and roles and then simply annotate your controller methods
   with the @ViravaSecured annotation.
-
 ```java
-
-@ViravaSecured(resource = Resources.PROJECT, scope = ScopeType.READ)
-public ResponseEntity<Project> getProject(Long projectId) {
-    return ResponseEntity.ok(projectService.getProject(projectId));
-}
-
-@ViravaSecured(resource = Resources.PROJECT, scope = ScopeType.CREATE)
-public ResponseEntity<Project> createProject(Project project) {
-    return ResponseEntity.ok(projectService.createProject(project));
-}
+    @ViravaSecured(resource = Resources.PROJECT, scope = ScopeType.READ)
+    public ResponseEntity<Project> getProject(Long projectId) {
+        return ResponseEntity.ok(projectService.getProject(projectId));
+    }
+    
+    @ViravaSecured(resource = Resources.PROJECT, scope = ScopeType.CREATE)
+    public ResponseEntity<Project> createProject(Project project) {
+        return ResponseEntity.ok(projectService.createProject(project));
+    }
 ```
 
 - **Error Handling**: Virava has integrated error handling for authentication and authorisation errors.
