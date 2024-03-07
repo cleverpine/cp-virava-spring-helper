@@ -13,20 +13,24 @@ Virava provides the following features:
 
 - **Type-safe Authorisation Rules**: Define your resources and roles and then simply annotate your controller methods
   with the @ViravaSecured annotation.
+
 ```java
-    @ViravaSecured(resource = Resources.PROJECT, scope = ScopeType.READ)
-    public ResponseEntity<Project> getProject(Long projectId) {
-        return ResponseEntity.ok(projectService.getProject(projectId));
-    }
-    
-    @ViravaSecured(resource = Resources.PROJECT, scope = ScopeType.CREATE)
-    public ResponseEntity<Project> createProject(Project project) {
-        return ResponseEntity.ok(projectService.createProject(project));
-    }
+
+@ViravaSecured(resource = Resources.PROJECT, scope = ScopeType.READ)
+public ResponseEntity<Project> getProject(Long projectId) {
+    return ResponseEntity.ok(projectService.getProject(projectId));
+}
+
+@ViravaSecured(resource = Resources.PROJECT, scope = ScopeType.CREATE)
+public ResponseEntity<Project> createProject(Project project) {
+    return ResponseEntity.ok(projectService.createProject(project));
+}
 ```
 
 - **Error Handling**: Virava has integrated error handling for authentication and authorisation errors.
-  All cases are handled with proper http status codes and error messages.
+  All cases are handled with proper http status codes and error messages. Without a defined and registered
+  ViravaAuthErrorEntryPoint bean, the default http status for both authentication and authorisation errors is 403 Forbidden. With
+  it - 401 Unauthorized. Below configuration includes the bean.
 - **Customisable User Principle Provider**: You can easily extend the ViravaPrincipleProvider to be able to access
   user specific data throughout the application via the SecurityContext.
 - **Customisable Authentication Providers**: Virava is developed and tested with Keycloak, however, it can be easily
@@ -190,7 +194,40 @@ Virava provides the following features:
         public ExceptionTypeMapper exceptionTypeMapper() {
             return new BaseExceptionTypeMapper();
         }
+   
+       @Bean
+       public ViravaAuthErrorEntryPoint viravaAuthErrorEntryPoint(ObjectMapper objectMapper) {
+            return new ViravaAuthErrorEntryPoint(objectMapper);
+        }
     }
     ```
-10. Register your ViravaFilter in you security configuration.
+10. Register your ViravaFilter & ViravaAuthErrorEntryPoint in you security configuration.
+   ```java
+   @Configuration
+   @EnableWebSecurity
+   @AllArgsConstructor
+   public class SecurityConfig {
+   
+       private final ViravaFilter authoritiesFilter;
+       private final ViravaAuthErrorEntryPoint viravaAuthErrorEntryPoint;
+   
+       @Bean
+       public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+           http
+                   .authorizeHttpRequests(authz -> authz
+                           .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/*/*.yml", "/api/system/*")
+                           .permitAll()
+                           .anyRequest()
+                           .authenticated())
+                   .exceptionHandling(eh -> eh.authenticationEntryPoint(viravaAuthErrorEntryPoint))
+                   .csrf(CsrfConfigurer::disable)
+                   .addFilterAfter(authoritiesFilter, BasicAuthenticationFilter.class)
+                   .sessionManagement(session -> session
+                           .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                   );
+   
+           return http.build();
+       }
+   }
+   ```
 11. Finally, annotate your controller methods with the @ViravaSecured annotation.
