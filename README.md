@@ -4,7 +4,7 @@
 
 Virava is a simple and easy to use authentication and authorisation library for Java Spring Boot Applications.
 It is a wrapper around Spring Security and provides a simple way to configure and use Spring Security in your
-application with OAuth2.0 and OpenID Connect. It leverages the power of Sprint AOP to provide a simple and type-safe
+application with OAuth2.0 and OpenID Connect. It leverages the power of Spring AOP to provide a simple and type-safe
 way to define authorisation rules in your controllers.
 
 ## Features
