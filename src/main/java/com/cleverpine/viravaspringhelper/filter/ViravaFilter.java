@@ -52,7 +52,7 @@ public class ViravaFilter extends OncePerRequestFilter {
         var tokenString = authorizationHeader.substring(BEARER_PREFIX.length());
         try {
             var jwt = tokenAuthenticator.process(tokenString);
-            var payload = new String(Base64.getDecoder().decode(jwt.getPayload()));
+            var payload = new String(Base64.getUrlDecoder().decode(jwt.getPayload()));
             Map<String, Object> payloadJsonMap = objectMapper.readValue(payload, new TypeReference<Map<String, Object>>() {
             });
             var authentication = ViravaAuthenticationToken
