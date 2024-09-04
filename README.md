@@ -24,7 +24,6 @@ Virava provides the following features:
         return ResponseEntity.ok(projectService.createProject(project));
     }
 ```
-
 - **Error Handling**: Virava has integrated error handling for authentication and authorisation errors.
   All cases are handled with proper http status codes and error messages. Without a defined and registered
   ViravaAuthErrorEntryPoint bean, the default http status for both authentication and authorisation errors is 403 Forbidden. With
@@ -188,11 +187,6 @@ Virava provides the following features:
            return new ViravaFilter(roleConfig, objectMapper, authTokenConfig, tokenAuthenticator());
         }
 
-        @Bean
-        public ExceptionTypeMapper exceptionTypeMapper() {
-            return new BaseExceptionTypeMapper();
-        }
-   
        @Bean
        public ViravaAuthErrorEntryPoint viravaAuthErrorEntryPoint(ObjectMapper objectMapper) {
             return new ViravaAuthErrorEntryPoint(objectMapper);
