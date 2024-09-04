@@ -22,7 +22,6 @@
         <tomcat.version>10.1.28</tomcat.version>
         <java-jwt.version>4.4.0</java-jwt.version>
         <jwks-rsa.version>0.22.1</jwks-rsa.version>
-        <cp-spring-error-util.version>1.0.3</cp-spring-error-util.version>
 
         <!-- plugins -->
         <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
