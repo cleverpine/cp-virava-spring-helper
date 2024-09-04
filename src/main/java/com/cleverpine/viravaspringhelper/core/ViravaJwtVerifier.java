@@ -33,7 +33,7 @@ public class ViravaJwtVerifier implements TokenAuthenticator<DecodedJWT> {
     }
 
     @Override
-    public DecodedJWT process(String token) {
+    public DecodedJWT process(String token) throws ViravaAuthenticationException {
         try {
             return isJwkSetProviderInitialized() ?
                     verifyTokenAsymmetrically(token) :
