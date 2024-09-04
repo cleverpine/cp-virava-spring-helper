@@ -1,6 +1,8 @@
 package com.cleverpine.viravaspringhelper.error.exception;
 
-public class ViravaAuthenticationException extends RuntimeException {
+import org.springframework.security.core.AuthenticationException;
+
+public class ViravaAuthenticationException extends AuthenticationException {
 
     public ViravaAuthenticationException(String message) {
         super(message);
