@@ -78,11 +78,6 @@
             <artifactId>tomcat-embed-core</artifactId>
             <version>${tomcat.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.cleverpine</groupId>
-            <artifactId>cp-spring-error-util</artifactId>
-            <version>${cp-spring-error-util.version}</version>
-        </dependency>
     </dependencies>
 
     <build>
