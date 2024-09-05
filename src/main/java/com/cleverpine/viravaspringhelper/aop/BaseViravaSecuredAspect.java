@@ -5,6 +5,7 @@ import com.cleverpine.viravaspringhelper.core.ViravaAuthenticationToken;
 import com.cleverpine.viravaspringhelper.core.ViravaPrincipalProvider;
 import com.cleverpine.viravaspringhelper.core.ViravaUserPrincipal;
 import com.cleverpine.viravaspringhelper.dto.ScopeType;
+import com.cleverpine.viravaspringhelper.error.exception.ViravaAccessDeniedException;
 import com.cleverpine.viravaspringhelper.error.exception.ViravaAuthenticationException;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -33,7 +34,7 @@ public class BaseViravaSecuredAspect {
         Long resourceId = getMethodSuppliedResourceId(joinPoint, resourceIdParamName);
 
         if (!principal.isAuthorized(resource, resourceId, requireAllResourceIds, scopeList)) {
-            throw new ViravaAuthenticationException("User doesn't have required permissions");
+            throw new ViravaAccessDeniedException("User doesn't have required permissions");
         }
     }
 
@@ -44,7 +45,7 @@ public class BaseViravaSecuredAspect {
         if (principal == null) {
             throw new ViravaAuthenticationException("Missing ViravaUserPrincipal");
         } else if (!principal.isAuthorized(resource, scopeList)) {
-            throw new ViravaAuthenticationException("User doesn't have required permissions");
+            throw new ViravaAccessDeniedException("User doesn't have required permissions");
         }
     }
 
