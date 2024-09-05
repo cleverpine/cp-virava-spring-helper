@@ -1,5 +1,6 @@
 package com.cleverpine.viravaspringhelper.error;
 
+import com.cleverpine.viravaspringhelper.core.ViravaFilterExceptionHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +17,7 @@ import java.util.function.Supplier;
 public class ViravaAuthErrorEntryPoint implements AuthenticationEntryPoint {
 
     private ObjectMapper objectMapper;
-    private Supplier<String> responseBodySupplier;
+    private ViravaFilterExceptionHandler viravaFilterExceptionHandler;
 
     /**
      * Creates a new instance of {@link ViravaAuthErrorEntryPoint} with the given {@link ObjectMapper}.
@@ -29,37 +30,31 @@ public class ViravaAuthErrorEntryPoint implements AuthenticationEntryPoint {
     }
 
     /**
-     * Creates a new instance of {@link ViravaAuthErrorEntryPoint} with the given {@link Supplier}.
-     * Use this constructor if you want to provide a custom error response.
+     * Creates a new instance of {@link ViravaAuthErrorEntryPoint} with the given {@link ViravaFilterExceptionHandler}.
+     * Use this constructor if you want to handle the error response yourself.
      *
-     * @param responseBodySupplier the supplier to provide the error response
+     * @param viravaFilterExceptionHandler the {@link ViravaFilterExceptionHandler} to use for handling the error response
      */
-    public ViravaAuthErrorEntryPoint(Supplier<String> responseBodySupplier) {
-        this.responseBodySupplier = responseBodySupplier;
+    public ViravaAuthErrorEntryPoint(ViravaFilterExceptionHandler viravaFilterExceptionHandler) {
+        this.viravaFilterExceptionHandler = viravaFilterExceptionHandler;
     }
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
             throws IOException {
-        var unauthorizedHttpStatus = HttpStatus.UNAUTHORIZED;
-        response.setStatus(unauthorizedHttpStatus.value());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter().write(getResponseBody(unauthorizedHttpStatus, authException.getMessage(), request.getRequestURI()));
-    }
-
-    private String getResponseBody(HttpStatus status, String message, String requestUri) throws JsonProcessingException {
-        String responseBody;
-        if (responseBodySupplier != null) {
-            responseBody = responseBodySupplier.get();
+        if (viravaFilterExceptionHandler != null) {
+            viravaFilterExceptionHandler.handle(request, response, authException);
         } else {
+            var unauthorizedHttpStatus = HttpStatus.UNAUTHORIZED;
+            response.setStatus(unauthorizedHttpStatus.value());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             var errorResponse = new ViravaErrorResponse(
                     LocalDateTime.now(),
-                    status.value(),
-                    status.getReasonPhrase(),
-                    message,
-                    requestUri);
-            responseBody = objectMapper.writeValueAsString(errorResponse);
+                    unauthorizedHttpStatus.value(),
+                    unauthorizedHttpStatus.getReasonPhrase(),
+                    authException.getMessage(),
+                    request.getRequestURI());
+            response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
         }
-        return responseBody;
     }
 }
